@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Eight Weeks — Weekly Planner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#000;--paper:#fff;--dim:#9a9a9a;--line:rgba(255,255,255,.85);--disp:'Unbounded','Arial Black',sans-serif;--body:'Space Grotesk',Helvetica,Arial,sans-serif;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;background:#000;color:#fff;font-family:var(--body)}
+.dots{background-image:radial-gradient(#fff 1.1px,transparent 1.5px);background-size:6px 6px}
+.dots2{background-image:radial-gradient(#fff .9px,transparent 1.3px),radial-gradient(#fff .9px,transparent 1.3px);background-size:8px 8px;background-position:0 0,4px 4px}
+.app{max-width:1280px;margin:0 auto;padding:18px 64px 24px;position:relative}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.toolbar .brand{font-family:var(--disp);font-weight:300;font-size:12px;letter-spacing:.04em}
+.btns{display:flex;gap:8px}
+button{font:500 13px var(--body);color:#fff;background:#000;border:1px solid var(--line);border-radius:999px 14px 999px 14px;padding:8px 16px;cursor:pointer}
+button:hover{background:#fff;color:#000}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.nav{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:96px;display:flex;align-items:center;justify-content:center;padding:0;z-index:5;font-size:22px}
+.nav.l{left:8px;border-radius:0 60px 60px 0 / 0 48px 48px 0}
+.nav.r{right:8px;border-radius:60px 0 0 60px / 48px 0 0 48px}
+.nav:disabled{opacity:.25;cursor:default;background:#000;color:#fff}
+.page{display:none;position:relative;border:1px solid var(--line);border-radius:40px 8px 40px 8px;padding:22px;overflow:hidden;min-height:760px;background:#000}
+.page.on{display:block}
+.head{position:relative;display:grid;grid-template-columns:1fr auto;align-items:end;gap:16px;min-height:130px;border:1px solid var(--line);border-radius:28px 6px 28px 6px;padding:16px 22px;overflow:hidden;margin-bottom:14px}
+.cloud{position:absolute;inset:0;opacity:.9;-webkit-mask-image:radial-gradient(ellipse 38% 90% at 12% 10%,#000 30%,transparent 72%),radial-gradient(ellipse 30% 80% at 88% 20%,#000 20%,transparent 70%);mask-image:radial-gradient(ellipse 38% 90% at 12% 10%,#000 30%,transparent 72%),radial-gradient(ellipse 30% 80% at 88% 20%,#000 20%,transparent 70%)}
+.head>*:not(.cloud):not(.star){position:relative;z-index:2}
+.star{position:absolute;width:64px;height:64px;right:30%;top:-8px;z-index:1;fill:#000;stroke:#fff;stroke-width:.8}
+.wk{font-family:var(--disp);font-weight:300;font-size:12px;margin:0 0 6px;background:#000;display:inline-block;padding:2px 8px;border-radius:99px}
+.range{font-family:var(--disp);font-weight:500;font-size:clamp(22px,3.6vw,42px);width:100%;background:#000;border:0;color:#fff;padding:2px 8px;border-radius:12px 4px 12px 4px;letter-spacing:-.02em}
+.mini{background:#000;padding:6px 12px;border-radius:20px 4px 20px 4px;border:1px solid var(--line);font-size:13px;text-align:right}
+.mini label{display:block;color:var(--dim);font-size:11px}
+.mini input{background:transparent;border:0;color:#fff;font:500 14px var(--body);text-align:right;width:150px}
+.row{display:grid;gap:14px;margin-bottom:14px}
+.row.two{grid-template-columns:1fr 1fr}
+.box{position:relative;border:1px solid var(--line);border-radius:26px 6px 26px 6px;padding:12px 16px 14px;display:flex;flex-direction:column;min-height:150px;background:#000}
+.box:nth-child(even){border-radius:6px 26px 6px 26px}
+.box h3{margin:0 0 6px;font-family:var(--disp);font-weight:500;font-size:13px;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.box h3 svg{width:14px;height:14px;fill:#fff;flex:none}
+textarea{flex:1;width:100%;resize:none;background:transparent;border:0;color:#fff;font:400 14px/26px var(--body);padding:0;min-height:90px;background-image:repeating-linear-gradient(transparent 0 25px,rgba(255,255,255,.28) 25px 26px);background-attachment:local}
+textarea::placeholder{color:#555}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.day{border:1px solid var(--line);border-radius:22px 4px 22px 4px;padding:10px 10px 10px;display:flex;flex-direction:column;min-height:250px;background:#000;position:relative;overflow:hidden}
+.day:nth-child(even){border-radius:4px 22px 4px 22px}
+.day.wknd{background-color:#000}
+.day.wknd::before{content:"";position:absolute;inset:0;opacity:.16;pointer-events:none}
+.day .n{font-family:var(--disp);font-weight:300;font-size:11px}
+.day .d{font-family:var(--disp);font-weight:500;font-size:30px;line-height:1.1;margin:2px 0 6px;letter-spacing:-.03em}
+.day textarea{font-size:13px;line-height:24px;min-height:150px;background-image:repeating-linear-gradient(transparent 0 23px,rgba(255,255,255,.28) 23px 24px);position:relative}
+.wm{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;color:var(--dim);display:flex;justify-content:center;align-items:center;gap:6px}
+.wm b{color:#fff;font-weight:500}
+.pg{padding-bottom:34px}
+.dotsnav{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.dotsnav button{width:14px;height:14px;padding:0;border-radius:50%}
+.dotsnav button.on{background:#fff}
+.bgstar{position:absolute;fill:#000;stroke:#fff;stroke-width:.7;pointer-events:none}
+@media(max-width:980px){.app{padding:14px 12px 24px}.days{grid-template-columns:repeat(2,1fr)}.row.two{grid-template-columns:1fr}.head{grid-template-columns:1fr}.mini{text-align:left}.mini input{text-align:left}.nav{width:36px;height:72px}.page{padding:14px;min-height:0}.star{right:8%}}
+@media print{
+@page{size:A4 landscape;margin:6mm}
+html,body{background:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.toolbar,.nav,.dotsnav{display:none!important}
+.app{max-width:none;padding:0}
+.page,.page.on{display:block;min-height:0;height:196mm;break-after:page;page-break-after:always;padding:12px;border-radius:24px 6px 24px 6px}
+.head{min-height:90px;margin-bottom:8px}
+.range{font-size:26px}
+.row{margin-bottom:8px;gap:8px}
+.box{min-height:80px;padding:8px 12px}
+textarea{min-height:40px;overflow:hidden}
+.day{min-height:130px;padding:6px 8px}
+.day .d{font-size:22px}
+.day textarea{min-height:80px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><symbol id="st" viewBox="0 0 100 100"><path d="M50 0Q53 47 100 50Q53 53 50 100Q47 53 0 50Q47 47 50 0Z"/></symbol></defs></svg>
+<div class="app">
+  <div class="toolbar">
+    <div class="brand">Eight weeks, one page each</div>
+    <div class="btns">
+      <button id="prt">Print / Save as PDF</button>
+      <button id="clr">Clear this week</button>
+    </div>
+  </div>
+  <button class="nav l" id="prev" aria-label="Previous week">&#8592;</button>
+  <button class="nav r" id="next" aria-label="Next week">&#8594;</button>
+  <div id="pages"></div>
+  <div class="dotsnav" id="dots"></div>
+</div>
+<script>
+const KEY='eight-week-planner-v1';
+let data={};
+try{data=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){data={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}}
+const mon=(()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d})();
+const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const D=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const fmt=d=>M[d.getMonth()]+' '+d.getDate();
+const star=(c,s)=>`<svg class="bgstar ${c}" style="${s}" viewBox="0 0 100 100"><use href="#st"/></svg>`;
+const icon='<svg viewBox="0 0 100 100"><use href="#st"/></svg>';
+const pages=document.getElementById('pages'),dots=document.getElementById('dots');
+const area=(id,ph)=>`<textarea data-k="${id}" placeholder="${ph||''}" spellcheck="true"></textarea>`;
+for(let w=0;w<8;w++){
+  const s=new Date(mon);s.setDate(s.getDate()+w*7);
+  const e=new Date(s);e.setDate(e.getDate()+6);
+  const range=fmt(s)+' – '+fmt(e)+', '+e.getFullYear();
+  const p=`w${w}`;
+  let days='';
+  for(let i=0;i<7;i++){
+    const d=new Date(s);d.setDate(d.getDate()+i);
+    days+=`<div class="day ${i>4?'wknd dots2':''}"><div class="n">${D[i]}</div><div class="d">${d.getDate()}</div>${area(p+'d'+i,'')}</div>`;
+  }
+  const sec=(t,k,ph)=>`<div class="box"><h3>${icon}${t}</h3>${area(p+k,ph)}</div>`;
+  pages.insertAdjacentHTML('beforeend',`
+  <section class="page pg" data-i="${w}" aria-label="Week ${w+1} of 8">
+    ${star('','width:150px;height:150px;right:-50px;bottom:-40px')}
+    <div class="head">
+      <div class="cloud dots"></div>
+      <svg class="star" viewBox="0 0 100 100"><use href="#st"/></svg>
+      <div><p class="wk">Week ${String(w+1).padStart(2,'0')} of 08</p>
+      <input class="range" data-k="${p}range" value="${range}" aria-label="Week date range"></div>
+      <div class="mini"><label>Theme of the week</label><input data-k="${p}theme" placeholder="Name this week"></div>
+    </div>
+    <div class="row two">${sec('Weekly goals','g','What do you want to finish by Sunday?')}${sec('Top priorities','p','The three things that matter most')}</div>
+    <div class="days" style="margin-bottom:14px">${days}</div>
+    <div class="row two" style="margin-bottom:0">${sec('Notes','n','Ideas, reminders, loose ends')}${sec('Gratitude &amp; reflection','r','What went well? What are you thankful for?')}</div>
+    <div class="wm">Built by <b>Oficina de encargo y otros</b></div>
+  </section>`);
+  dots.insertAdjacentHTML('beforeend',`<button data-go="${w}" aria-label="Go to week ${w+1}"></button>`);
+}
+document.querySelectorAll('[data-k]').forEach(el=>{
+  const k=el.dataset.k;
+  if(data[k]!==undefined)el.value=data[k];
+  el.addEventListener('input',()=>{data[k]=el.value;save()});
+});
+let cur=0;
+try{cur=Math.min(7,Math.max(0,parseInt(localStorage.getItem(KEY+'-p')||'0')||0))}catch(e){}
+function show(i){
+  cur=Math.min(7,Math.max(0,i));
+  document.querySelectorAll('.page').forEach((p,n)=>p.classList.toggle('on',n===cur));
+  dots.querySelectorAll('button').forEach((b,n)=>b.classList.toggle('on',n===cur));
+  prev.disabled=cur===0;next.disabled=cur===7;
+  try{localStorage.setItem(KEY+'-p',cur)}catch(e){}
+  scrollTo({top:0});
+}
+prev.onclick=()=>show(cur-1);next.onclick=()=>show(cur+1);
+dots.onclick=e=>{const b=e.target.closest('[data-go]');if(b)show(+b.dataset.go)};
+document.addEventListener('keydown',e=>{
+  if(/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;
+  if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1);
+});
+prt.onclick=()=>window.print();
+clr.onclick=()=>{
+  if(!confirm('Clear everything you typed on week '+(cur+1)+'?'))return;
+  document.querySelectorAll('.page.on [data-k]').forEach(el=>{
+    if(el.classList.contains('range'))return;
+    el.value='';data[el.dataset.k]='';
+  });save();
+};
+show(cur);
+</script>
+</body>
+</html>
